@@ -8,6 +8,6 @@ mvn clean compile install jetty:run
 
 Then navigate to 
 
-    http://localhost:8080/hello
+    http://localhost:8080/mjjs/hello
 
 
