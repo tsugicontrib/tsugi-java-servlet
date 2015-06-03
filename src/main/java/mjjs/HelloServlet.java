@@ -88,13 +88,18 @@ System.out.println("in="+in);
     try {
         stmt = connection.createStatement();
         ResultSet rs = stmt.executeQuery(query);
+        int count = 0;
         while (rs.next()) {
             String name = rs.getString("name");
             out.println("name="+name);
+            count++;
         }
+        out.println("Successfully read "+count+" rows from the database");
     } catch (SQLException e ) {
         out.println("Your database table is either missing or incorectly formatted");
         out.println("");
+        out.println("CREATE TABLE mjjs (name TEXT) ENGINE = InnoDB DEFAULT CHARSET=utf8;");
+        out.println("INSERT INTO mjjs (name) VALUES ('tsugi');");
         e.printStackTrace();
     }
 
