@@ -3,7 +3,7 @@
          xsi:schemaLocation="http:/java.sun.com/dtd/web-app_2_3.dtd">
   <servlet>
     <servlet-name>hello</servlet-name>
-    <servlet-class>org.tsugi.TsugiServlet</servlet-class>
+    <servlet-class>org.tsugi.sample.TsugiServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>
