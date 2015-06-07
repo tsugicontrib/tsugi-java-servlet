@@ -1,4 +1,4 @@
-package mjjs;
+package org.tsugi.sample;
 
 import java.io.*;
 
@@ -15,7 +15,7 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 
 
-public class HelloServlet extends HttpServlet {
+public class TsugiServlet extends HttpServlet {
   public void doGet (HttpServletRequest req,
                      HttpServletResponse res)
     throws ServletException, IOException
