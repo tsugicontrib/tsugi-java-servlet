@@ -19,6 +19,46 @@
   </properties>
 
   <dependencies>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.3.2</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.9</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>3.2.1</version>
+    </dependency>
+    <dependency>
+        <groupId>commons-logging</groupId>
+        <artifactId>commons-logging</artifactId>
+        <version>1.2</version>
+    </dependency>
+
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>1.7.5</version>
+    </dependency>
+
+        <dependency>
+            <groupId>org.tsugi</groupId>
+            <artifactId>tsugi-java</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+
+    <dependency>
+       <groupId>org.sakaiproject.basiclti</groupId>
+       <artifactId>basiclti-util</artifactId>
+       <version>10.4</version>
+    </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
@@ -30,12 +70,6 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.35</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.tsugi</groupId>
-            <artifactId>tsugi-java</artifactId>
-            <version>0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
