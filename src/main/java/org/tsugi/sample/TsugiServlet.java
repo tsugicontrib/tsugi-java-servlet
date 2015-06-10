@@ -49,6 +49,15 @@ public class TsugiServlet extends HttpServlet {
         out.println("Tsugi="+tsugi);
         Launch launch = tsugi.getLaunch(req, res);
         out.println("launch="+launch);
+        if ( launch.isComplete() ) return;
+        if ( ! launch.isValid() ) {
+            out.println("Launch is not valid");
+            out.println(launch.getErrorMessage());
+            out.println("Base String:");
+            out.println(launch.getBaseString());
+            out.close();
+            return;
+        }
 
         out.println("Content Title: "+launch.getContext().getTitle());
         out.println("User Email: "+launch.getUser().getEmail());
