@@ -46,6 +46,14 @@ public class TsugiServlet extends HttpServlet {
         PrintWriter out = res.getWriter();
         out.println("<pre>");
         out.println("Welcome to hello world!");
+
+        HttpSession session = req.getSession();
+        Integer count = (Integer) session.getAttribute("count");
+        if ( count == null ) count = 1;
+        count++;
+        out.println("Counter="+count);
+        session.setAttribute("count", count);
+        out.println("");
         out.println("Tsugi="+tsugi);
         Launch launch = tsugi.getLaunch(req, res);
         out.println("launch="+launch);
@@ -66,7 +74,7 @@ public class TsugiServlet extends HttpServlet {
         out.println("Service URL: "+launch.getService().getURL());
 
 
-        out.println("");
+        out.println("<a href=\"/tsugi-servlet/hello\">Click here to see if we stay logged in with a GET</a>");
         out.println("</pre>");
         out.close();
     }
