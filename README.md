@@ -48,25 +48,27 @@ Launching with LTI
 ------------------
 
 We will launch the Java Servlet with the PHP Tsugi deveveloper's console.
-Navigate to:
+Make sure you have upgraded to the *latest* version of PHP Tsugi and then 
+navigate to:
 
     http://localhost:8080/tsugi
 
-Go into Developer mode - if the secret launch codes are not showing press 
-"Toggle Data".  Change the Launch URL to be:
+Go into Developer mode - under Tools, select "Java Servlet" to launch
+the Java servlet.
 
-    http://localhost:8080/tsugi-servlet/hello
-
-And press "Launch" at the top.  If all goes well, your Java Tsugi application
+If all goes well for the launch, your Java Tsugi application
 will be showing in the window with some kind of output like:
 
     Welcome to hello world!
-    Tsugi=org.tsugi.impl.jdbc.Tsugi_JDBC@64ef4b26
-    launch=org.tsugi.base.BaseLaunch@3cead1f9
     Content Title: Introduction to Programming
     User Email: inst@ischool.edu
-    Link Title: Activity: attend
-    Sourcedid: e10e575674e68bbcd873e2962f5a138b
+    Link Title: Activity: undefined
+    Sourcedid: 9e85888154ef19f4a8a41afffec8edb5
+    JavaScript library versions:
+    jquery-ui: 1.10.0
+    jquery: 1.10.2
+    handlebars: 3.0.3
+    bootstrap: 3.1.1
 
 If your database connection is mis-configured or not working in the Tsugi
 servlet you will be splashed with plenty of traceback in the iframe:
