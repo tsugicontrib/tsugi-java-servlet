@@ -14,6 +14,7 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 
 import org.tsugi.*;
+import org.tsugi.util.TsugiUtils;
 
 public class TsugiServlet extends HttpServlet {
 
@@ -48,7 +49,7 @@ public class TsugiServlet extends HttpServlet {
 
         Output o = launch.getOutput();
 
-        o.header(out);
+        Properties versions = o.header(out);
         o.bodyStart(out);
         HttpSession session = req.getSession();
         Integer count = (Integer) session.getAttribute("count");
@@ -79,6 +80,9 @@ public class TsugiServlet extends HttpServlet {
         out.println("Link Title: "+launch.getLink().getTitle());
         out.println("Sourcedid: "+launch.getResult().getSourceDID());
         out.println("Service URL: "+launch.getService().getURL());
+        out.println("");
+        out.println("JavaScript library versions:");
+        out.println(TsugiUtils.dumpProperties(versions));
 
 
         out.println("<a href=\"/tsugi-servlet/hello\">Click here to see if we stay logged in with a GET</a>");
