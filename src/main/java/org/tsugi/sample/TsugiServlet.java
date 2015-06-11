@@ -13,9 +13,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
 
-import org.tsugi.Tsugi;
-import org.tsugi.TsugiFactory;
-import org.tsugi.Launch;
+import org.tsugi.*;
 
 public class TsugiServlet extends HttpServlet {
 
@@ -54,7 +52,11 @@ public class TsugiServlet extends HttpServlet {
         out.println("Counter="+count);
         session.setAttribute("count", count);
         out.println("");
+
+        // Check to see what we got from init()
         out.println("Tsugi="+tsugi);
+
+        // Get this launch
         Launch launch = tsugi.getLaunch(req, res);
         out.println("launch="+launch);
         if ( launch.isComplete() ) return;
@@ -65,6 +67,15 @@ public class TsugiServlet extends HttpServlet {
             out.println(launch.getBaseString());
             out.close();
             return;
+        }
+
+        out.println("</pre>");
+        Output o = launch.getOutput();
+        o.flashMessages(out);
+        if ( count % 2 == 0 ) {
+            o.flashError("Counter="+count);
+        } else {
+            o.flashSuccess("Counter="+count);
         }
 
         out.println("Content Title: "+launch.getContext().getTitle());
