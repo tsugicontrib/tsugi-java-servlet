@@ -42,24 +42,29 @@ public class TsugiServlet extends HttpServlet {
         throws ServletException, IOException
     {
         PrintWriter out = res.getWriter();
-        out.println("<pre>");
-        out.println("Welcome to hello world!");
 
+        Launch launch = tsugi.getLaunch(req, res);
+        if ( launch.isComplete() ) return;
+
+        Output o = launch.getOutput();
+
+        o.header(out);
+        o.bodyStart(out);
         HttpSession session = req.getSession();
         Integer count = (Integer) session.getAttribute("count");
         if ( count == null ) count = 1;
         count++;
-        out.println("Counter="+count);
         session.setAttribute("count", count);
-        out.println("");
+        o.flashMessages(out);
+        if ( count % 2 == 0 ) {
+            o.flashError("Counter="+count);
+        } else {
+            o.flashSuccess("Counter="+count);
+        }
 
-        // Check to see what we got from init()
-        out.println("Tsugi="+tsugi);
+        out.println("<pre>");
+        out.println("Welcome to hello world!");
 
-        // Get this launch
-        Launch launch = tsugi.getLaunch(req, res);
-        out.println("launch="+launch);
-        if ( launch.isComplete() ) return;
         if ( ! launch.isValid() ) {
             out.println("Launch is not valid");
             out.println(launch.getErrorMessage());
@@ -67,15 +72,6 @@ public class TsugiServlet extends HttpServlet {
             out.println(launch.getBaseString());
             out.close();
             return;
-        }
-
-        out.println("</pre>");
-        Output o = launch.getOutput();
-        o.flashMessages(out);
-        if ( count % 2 == 0 ) {
-            o.flashError("Counter="+count);
-        } else {
-            o.flashSuccess("Counter="+count);
         }
 
         out.println("Content Title: "+launch.getContext().getTitle());
