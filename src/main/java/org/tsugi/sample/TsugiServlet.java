@@ -76,14 +76,17 @@ public class TsugiServlet extends HttpServlet {
         }
 
         out.println("Content Title: "+launch.getContext().getTitle());
+        out.println("Context Settings: "+launch.getContext().getSettings().getSettingsJson());
         out.println("User Email: "+launch.getUser().getEmail());
         out.println("Link Title: "+launch.getLink().getTitle());
+        out.println("Link Settings: "+launch.getLink().getSettings().getSettingsJson());
         out.println("Sourcedid: "+launch.getResult().getSourceDID());
         out.println("Service URL: "+launch.getService().getURL());
         out.println("");
         out.println("JavaScript library versions:");
         out.println(TsugiUtils.dumpProperties(versions));
 
+        launch.getContext().getSettings().setSetting("count", count+"");
 
         out.println("<a href=\"/tsugi-servlet/hello\">Click here to see if we stay logged in with a GET</a>");
         out.println("</pre>");
