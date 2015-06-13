@@ -34,13 +34,9 @@ Then navigate to
 
 It will say something like this:
 
-    Welcome to hello world!
-    Tsugi=org.tsugi.impl.jdbc.Tsugi_JDBC@64ef4b26
-    launch=org.tsugi.base.BaseLaunch@103bdfa2
-    Launch is not valid
+    HTTP ERROR: 500
     This tool must be launched using LTI
-    Base String:
-    null
+    RequestURI=/tsugi-servlet/hello
 
 It does not talk to the database if it rejects the request. 
 
@@ -60,15 +56,9 @@ If all goes well for the launch, your Java Tsugi application
 will be showing in the window with some kind of output like:
 
     Welcome to hello world!
+    Click here to see if we stay logged in with a GET
     Content Title: Introduction to Programming
-    User Email: inst@ischool.edu
-    Link Title: Activity: undefined
-    Sourcedid: 9e85888154ef19f4a8a41afffec8edb5
-    JavaScript library versions:
-    jquery-ui: 1.10.0
-    jquery: 1.10.2
-    handlebars: 3.0.3
-    bootstrap: 3.1.1
+    Context Settings: {"zap":"1234","count":"1"}
 
 If your database connection is mis-configured or not working in the Tsugi
 servlet you will be splashed with plenty of traceback in the iframe:
