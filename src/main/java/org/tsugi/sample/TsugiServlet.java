@@ -42,26 +42,48 @@ public class TsugiServlet extends HttpServlet {
     public void doGet (HttpServletRequest req, HttpServletResponse res) 
         throws ServletException, IOException
     {
-        PrintWriter out = res.getWriter();
+        HttpSession session = req.getSession();
+        Integer count = (Integer) session.getAttribute("count");
+        if ( count == null ) count = 0;
 
         Launch launch = tsugi.getLaunch(req, res);
         if ( launch.isComplete() ) return;
-
         Output o = launch.getOutput();
+
+        boolean isPost = "POST".equals(req.getMethod());
+        if ( isPost && req.getParameter("count") != null ) {
+            try {
+                count = new Integer( (String) req.getParameter("count"));
+                session.setAttribute("count", count);
+                o.flashSuccess("POST set Counter="+count);
+            } catch(Exception ex) {
+                o.flashError(ex.getMessage());
+            }
+            o.postRedirect(null);
+            return;
+        }
+
+
+        PrintWriter out = res.getWriter();
 
         Properties versions = o.header(out);
         o.bodyStart(out);
-        HttpSession session = req.getSession();
-        Integer count = (Integer) session.getAttribute("count");
-        if ( count == null ) count = 1;
-        count++;
         session.setAttribute("count", count);
         o.flashMessages(out);
-        if ( count % 2 == 0 ) {
-            o.flashError("Counter="+count);
-        } else {
-            o.flashSuccess("Counter="+count);
-        }
+
+        out.print("<p><form method=\"post\" action=\"");
+        out.print(launch.getOutput().getPostUrl(null));
+        out.println("\">");
+        out.println(launch.getOutput().getHidden());
+        out.print("Count: <input type=\"text\" name=\"count\" value=\"");
+        out.print(count);
+        out.println("\">");
+        out.println("<input type=\"submit\">");
+        out.println("</form></p>");
+
+        // Increment our counter
+        count++;
+        session.setAttribute("count", count);
 
         out.println("<pre>");
         out.println("Welcome to hello world!");
@@ -92,14 +114,6 @@ public class TsugiServlet extends HttpServlet {
         out.print(launch.getOutput().getGetUrl(null));
         out.print("\">Click here to see if we stay logged in with a GET</a>");
         out.println("</pre>");
-
-        out.print("<form method=\"post\" action=\"");
-        out.print(launch.getOutput().getPostUrl(null));
-        out.println("\">");
-        out.println(launch.getOutput().getHidden());
-        out.println("Count: <input type=\"text\" name=\"count\">");
-        out.println("<input type=\"submit\">");
-        out.println("</form>");
         out.close();
     }
 }
