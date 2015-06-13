@@ -88,8 +88,18 @@ public class TsugiServlet extends HttpServlet {
 
         launch.getContext().getSettings().setSetting("count", count+"");
 
-        out.println("<a href=\"/tsugi-servlet/hello\">Click here to see if we stay logged in with a GET</a>");
+        out.print("<a href=\"");
+        out.print(launch.getOutput().getGetUrl(null));
+        out.print("\">Click here to see if we stay logged in with a GET</a>");
         out.println("</pre>");
+
+        out.print("<form method=\"post\" action=\"");
+        out.print(launch.getOutput().getPostUrl(null));
+        out.println("\">");
+        out.println(launch.getOutput().getHidden());
+        out.println("Count: <input type=\"text\" name=\"count\">");
+        out.println("<input type=\"submit\">");
+        out.println("</form>");
         out.close();
     }
 }
