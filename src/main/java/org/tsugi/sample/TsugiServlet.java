@@ -9,6 +9,7 @@ import javax.servlet.*;
 
 import java.sql.DriverManager;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
@@ -16,7 +17,12 @@ import java.sql.ResultSet;
 import org.tsugi.*;
 import org.tsugi.util.TsugiUtils;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 public class TsugiServlet extends HttpServlet {
+
+    private Log log = LogFactory.getLog(TsugiServlet.class);
 
     Tsugi tsugi = null;
 
@@ -36,24 +42,22 @@ public class TsugiServlet extends HttpServlet {
     public void doPost (HttpServletRequest req, HttpServletResponse res) 
         throws ServletException, IOException
     {
-        doGet(req, res);
-    }
-
-    public void doGet (HttpServletRequest req, HttpServletResponse res) 
-        throws ServletException, IOException
-    {
-        HttpSession session = req.getSession();
-        Integer count = (Integer) session.getAttribute("count");
-        if ( count == null ) count = 0;
-
         Launch launch = tsugi.getLaunch(req, res);
-        if ( launch.isComplete() ) return;
+        if ( launch.isComplete() ) {
+            launch.getOutput().flashSuccess("LTI Launch validated and redirected");
+            log.info("LTI Launch validated and redirected...");
+            return;
+        }
+        if ( ! launch.isValid() ) {
+            throw new RuntimeException(launch.getErrorMessage());
+        }
+
+        HttpSession session = req.getSession();
         Output o = launch.getOutput();
 
-        boolean isPost = "POST".equals(req.getMethod());
-        if ( isPost && req.getParameter("count") != null ) {
+        if ( req.getParameter("count") != null ) {
             try {
-                count = new Integer( (String) req.getParameter("count"));
+                Integer count = new Integer( (String) req.getParameter("count"));
                 session.setAttribute("count", count);
                 o.flashSuccess("POST set Counter="+count);
             } catch(Exception ex) {
@@ -62,19 +66,41 @@ public class TsugiServlet extends HttpServlet {
             o.postRedirect(null);
             return;
         }
+    }
 
-
+    public void doGet (HttpServletRequest req, HttpServletResponse res) 
+        throws ServletException, IOException
+    {
+        HttpSession session = req.getSession();
         PrintWriter out = res.getWriter();
+
+        Launch launch = tsugi.getLaunch(req, res);
+        if ( launch.isComplete() ) return;
+        if ( ! launch.isValid() ) {
+            out.println("<pre>");
+            out.println("Launch is not valid");
+            out.println(launch.getErrorMessage());
+            out.println("Base String:");
+            out.println(launch.getBaseString());
+            out.println("</pre>");
+            out.close();
+            return;
+        }
+
+        // Start to handle our GET request
+        Output o = launch.getOutput();
+
+        Integer count = (Integer) session.getAttribute("count");
+        if ( count == null ) count = 0;
 
         Properties versions = o.header(out);
         o.bodyStart(out);
-        session.setAttribute("count", count);
         o.flashMessages(out);
 
         out.print("<p><form method=\"post\" action=\"");
-        out.print(launch.getOutput().getPostUrl(null));
+        out.print(o.getPostUrl(null));
         out.println("\">");
-        out.println(launch.getOutput().getHidden());
+        out.println(o.getHidden());
         out.print("Count: <input type=\"text\" name=\"count\" value=\"");
         out.print(count);
         out.println("\">");
@@ -88,14 +114,11 @@ public class TsugiServlet extends HttpServlet {
         out.println("<pre>");
         out.println("Welcome to hello world!");
 
-        if ( ! launch.isValid() ) {
-            out.println("Launch is not valid");
-            out.println(launch.getErrorMessage());
-            out.println("Base String:");
-            out.println(launch.getBaseString());
-            out.close();
-            return;
-        }
+        launch.getContext().getSettings().setSetting("count", count+"");
+
+        out.print("<a href=\"");
+        out.print(o.getGetUrl(null));
+        out.println("\">Click here to see if we stay logged in with a GET</a>");
 
         out.println("Content Title: "+launch.getContext().getTitle());
         out.println("Context Settings: "+launch.getContext().getSettings().getSettingsJson());
@@ -104,15 +127,37 @@ public class TsugiServlet extends HttpServlet {
         out.println("Link Settings: "+launch.getLink().getSettings().getSettingsJson());
         out.println("Sourcedid: "+launch.getResult().getSourceDID());
         out.println("Service URL: "+launch.getService().getURL());
+        out.println("A Spinner: <img src=\"");
+        out.println(o.getSpinnerUrl());
+        out.println("\">");
         out.println("");
         out.println("JavaScript library versions:");
         out.println(TsugiUtils.dumpProperties(versions));
 
-        launch.getContext().getSettings().setSetting("count", count+"");
+        try {
+            Connection c = launch.getConnection();
+            out.println("Connection: "+c);
+            DatabaseMetaData meta = c.getMetaData();
+            String productName = meta.getDatabaseProductName();
+            String productVersion = meta.getDatabaseProductVersion();
+            String URL = meta.getURL();
+            out.println("Connection product=" + productName+" version=" + productVersion);
+            out.println("Connection URL=" + URL);
+        } catch (Exception ex) {
+            log.error("Unable to get connection metadata",ex);
+            out.println("Unable to get connection metadata:"+ex.getMessage());
+        }
 
-        out.print("<a href=\"");
-        out.print(launch.getOutput().getGetUrl(null));
-        out.print("\">Click here to see if we stay logged in with a GET</a>");
+        // Cheat and look at the internal data Tsugi maintains - this depends on
+        // the JDBC implementation
+        Properties sess_row = (Properties) session.getAttribute("lti_row");
+        if ( sess_row != null ) {
+            out.println("");
+            out.println("Data from session (org.tsugi.impl.jdbc.Tsugi_JDBC)");
+            String x = TsugiUtils.dumpProperties(sess_row);
+            out.println(x);
+        }
+        
         out.println("</pre>");
         out.close();
     }
