@@ -49,7 +49,15 @@ public class TsugiServlet extends HttpServlet {
             return;
         }
         if ( ! launch.isValid() ) {
-            throw new RuntimeException(launch.getErrorMessage());
+            PrintWriter out = res.getWriter();
+            out.println("<pre>");
+            out.println("Launch is not valid");
+            out.println(launch.getErrorMessage());
+            out.println("Base String:");
+            out.println(launch.getBaseString());
+            out.println("</pre>");
+            out.close();
+            return;
         }
 
         HttpSession session = req.getSession();
@@ -77,14 +85,7 @@ public class TsugiServlet extends HttpServlet {
         Launch launch = tsugi.getLaunch(req, res);
         if ( launch.isComplete() ) return;
         if ( ! launch.isValid() ) {
-            out.println("<pre>");
-            out.println("Launch is not valid");
-            out.println(launch.getErrorMessage());
-            out.println("Base String:");
-            out.println(launch.getBaseString());
-            out.println("</pre>");
-            out.close();
-            return;
+            throw new RuntimeException(launch.getErrorMessage());
         }
 
         // Start to handle our GET request
