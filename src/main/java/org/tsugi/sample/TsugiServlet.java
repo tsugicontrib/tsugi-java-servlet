@@ -71,7 +71,7 @@ public class TsugiServlet extends HttpServlet {
             } catch(Exception ex) {
                 o.flashError(ex.getMessage());
             }
-            o.postRedirect(null);
+            launch.postRedirect(null);
             return;
         }
     }
@@ -99,9 +99,9 @@ public class TsugiServlet extends HttpServlet {
         o.flashMessages(out);
 
         out.print("<p><form method=\"post\" action=\"");
-        out.print(o.getPostUrl(null));
+        out.print(launch.getPostUrl(null));
         out.println("\">");
-        out.println(o.getHidden());
+        out.println(launch.getHidden());
         out.print("Count: <input type=\"text\" name=\"count\" value=\"");
         out.print(count);
         out.println("\">");
@@ -118,7 +118,7 @@ public class TsugiServlet extends HttpServlet {
         launch.getContext().getSettings().setSetting("count", count+"");
 
         out.print("<a href=\"");
-        out.print(o.getGetUrl(null));
+        out.print(launch.getGetUrl(null));
         out.println("\">Click here to see if we stay logged in with a GET</a>");
 
         out.println("Content Title: "+launch.getContext().getTitle());
@@ -129,7 +129,7 @@ public class TsugiServlet extends HttpServlet {
         out.println("Sourcedid: "+launch.getResult().getSourceDID());
         out.println("Service URL: "+launch.getService().getURL());
         out.println("A Spinner: <img src=\"");
-        out.println(o.getSpinnerUrl());
+        out.println(launch.getSpinnerUrl());
         out.println("\">");
         out.println("");
         out.println("JavaScript library versions:");
