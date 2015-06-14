@@ -124,6 +124,8 @@ public class TsugiServlet extends HttpServlet {
         out.println("Content Title: "+launch.getContext().getTitle());
         out.println("Context Settings: "+launch.getContext().getSettings().getSettingsJson());
         out.println("User Email: "+launch.getUser().getEmail());
+        out.println("isInstructor()="+launch.getUser().isInstructor());
+        out.println("isTenantAdmin()="+launch.getUser().isTenantAdmin());
         out.println("Link Title: "+launch.getLink().getTitle());
         out.println("Link Settings: "+launch.getLink().getSettings().getSettingsJson());
         out.println("Sourcedid: "+launch.getResult().getSourceDID());
@@ -160,6 +162,12 @@ public class TsugiServlet extends HttpServlet {
         }
         
         out.println("</pre>");
+
+        // Do the Footer
+        o.footerStart(out);
+        out.println("<!-- App footer stuff goes here -->");
+        o.footerEnd(out);
+
         out.close();
     }
 }
