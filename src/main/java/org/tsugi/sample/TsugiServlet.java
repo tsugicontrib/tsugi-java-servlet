@@ -115,12 +115,25 @@ public class TsugiServlet extends HttpServlet {
         out.println("<pre>");
         out.println("Welcome to hello world!");
 
+	// Dump out some stuff from the Request Object
+	out.println("");
+	out.println("<a href=\"http://docs.oracle.com/javaee/6/api/javax/servlet/http/HttpServletRequest.html\" target=\"_blank\">HttpServletRequest</a> data:");
+	out.println("req.getRequestURL()="+req.getRequestURL());
+	out.println("req.getMethod()="+req.getMethod());
+	out.println("req.getServletPath()="+req.getServletPath());
+	out.println("req.getPathInfo()="+req.getPathInfo());
+	out.println("req.getQueryString()="+req.getQueryString());
+
+
+	out.println("");
         launch.getContext().getSettings().setSetting("count", count+"");
 
         out.print("<a href=\"");
-        out.print(launch.getGetUrl(null));
+        out.print(launch.getGetUrl(null)+"/zap");
         out.println("\">Click here to see if we stay logged in with a GET</a>");
 
+	out.println("");
+	out.println("Using the <a href=\"http://csev.github.io/tsugi-java/apidocs/index.html\" target=\"_blank\">Tsugi API</a>:");
         out.println("Content Title: "+launch.getContext().getTitle());
         out.println("Context Settings: "+launch.getContext().getSettings().getSettingsJson());
         out.println("User Email: "+launch.getUser().getEmail());
@@ -137,8 +150,11 @@ public class TsugiServlet extends HttpServlet {
         out.println("JavaScript library versions:");
         out.println(TsugiUtils.dumpProperties(versions));
 
+	out.println("");
+	out.println("Using the provided JDBC connection:");
+        Connection c = null;
         try {
-            Connection c = launch.getConnection();
+            c = launch.getConnection();
             out.println("Connection: "+c);
             DatabaseMetaData meta = c.getMetaData();
             String productName = meta.getDatabaseProductName();
@@ -151,12 +167,34 @@ public class TsugiServlet extends HttpServlet {
             out.println("Unable to get connection metadata:"+ex.getMessage());
         }
 
+	// Do a simple query just to see how it is done
+	if ( c !=  null ) {
+		Statement stmt = null;
+		String query = "SELECT plugin_id, plugin_path FROM lms_plugins;";
+
+		try {
+			stmt = c.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			int num = 0;
+			while (rs.next()) {
+				String plugin_path = rs.getString("plugin_path");
+				out.println("plugin_path="+plugin_path);
+				num++;
+			}
+			out.println("Successfully read "+num+" rows from the database");
+		} catch (SQLException e ) {
+			out.println("Problems reading database");
+			out.println("INSERT INTO mjjs (name) VALUES ('tsugi');");
+			e.printStackTrace();
+		}
+	}
+
         // Cheat and look at the internal data Tsugi maintains - this depends on
         // the JDBC implementation
         Properties sess_row = (Properties) session.getAttribute("lti_row");
         if ( sess_row != null ) {
             out.println("");
-            out.println("Data from session (org.tsugi.impl.jdbc.Tsugi_JDBC)");
+            out.println("Tsugi-managed internal session data (Warning: org.tsugi.impl.jdbc.Tsugi_JDBC only)");
             String x = TsugiUtils.dumpProperties(sess_row);
             out.println(x);
         }
