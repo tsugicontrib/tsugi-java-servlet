@@ -47,16 +47,16 @@
         <version>1.7.5</version>
     </dependency>
 
-        <dependency>
-            <groupId>org.tsugi</groupId>
-            <artifactId>tsugi-java</artifactId>
-            <version>0.1-SNAPSHOT</version>
-        </dependency>
+    <dependency>
+        <groupId>org.tsugi</groupId>
+        <artifactId>tsugi-java</artifactId>
+        <version>0.1-SNAPSHOT</version>
+    </dependency>
 
     <dependency>
-       <groupId>org.sakaiproject.basiclti</groupId>
-       <artifactId>basiclti-util</artifactId>
-       <version>10.4</version>
+       <groupId>org.tsugi</groupId>
+       <artifactId>tsugi-util</artifactId>
+       <version>11-SNAPSHOT</version> 
     </dependency>
 
         <dependency>
