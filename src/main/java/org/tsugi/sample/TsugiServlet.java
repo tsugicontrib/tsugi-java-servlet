@@ -4,6 +4,8 @@ import java.io.*;
 
 import java.util.Properties;
 
+import java.net.URLEncoder;
+
 import javax.servlet.http.*;
 import javax.servlet.*;
 
@@ -49,9 +51,21 @@ public class TsugiServlet extends HttpServlet {
             return;
         }
         if ( ! launch.isValid() ) {
+            if ( req.getParameter("launch_presentation_return_url") != null ) {
+                String returnUrl = req.getParameter("launch_presentation_return_url");
+                if ( returnUrl.indexOf('?') > 0 ) {
+                    returnUrl += '&';
+                } else {
+                    returnUrl += '?';
+                }
+                returnUrl += "lti_errormsg=" + URLEncoder.encode(launch.getErrorMessage(), "UTF-8");
+                returnUrl += "&detail=" + URLEncoder.encode(launch.getBaseString(), "UTF-8");
+                res.sendRedirect(returnUrl);
+                return;
+            }
             PrintWriter out = res.getWriter();
             out.println("<pre>");
-            out.println("Launch is not valid");
+            out.println("Launch is not valid but nowhere to redirect");
             out.println(launch.getErrorMessage());
             out.println("Base String:");
             out.println(launch.getBaseString());
@@ -142,7 +156,7 @@ public class TsugiServlet extends HttpServlet {
         out.println("Link Title: "+launch.getLink().getTitle());
         out.println("Link Settings: "+launch.getLink().getSettings().getSettingsJson());
         out.println("Sourcedid: "+launch.getResult().getSourceDID());
-        out.println("Service URL: "+launch.getService().getURL());
+        // out.println("Service URL: "+launch.getService().getURL());
         out.println("A Spinner: <img src=\"");
         out.println(launch.getSpinnerUrl());
         out.println("\">");
