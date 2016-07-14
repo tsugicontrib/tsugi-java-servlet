@@ -43,14 +43,14 @@ It does not talk to the database if it rejects the request.
 Launching with LTI
 ------------------
 
-We will launch the Java Servlet with the PHP Tsugi deveveloper's console.
-Make sure you have upgraded to the *latest* version of PHP Tsugi and then 
-navigate to:
+To launch this app, go to:
 
-    http://localhost:8080/tsugi
+    https://online.dr-chuck.com/sakai-api-test/lms.php
 
-Go into Developer mode - under Tools, select "Java Servlet" to launch
-the Java servlet.
+Launch to:
+
+    http://localhost:8080/tsugi-servlet/hello
+    12345 / secret
 
 If all goes well for the launch, your Java Tsugi application
 will be showing in the window with some kind of output like:
