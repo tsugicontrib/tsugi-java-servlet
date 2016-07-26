@@ -51,18 +51,6 @@ public class TsugiServlet extends HttpServlet {
             return;
         }
         if ( ! launch.isValid() ) {
-            if ( req.getParameter("launch_presentation_return_url") != null ) {
-                String returnUrl = req.getParameter("launch_presentation_return_url");
-                if ( returnUrl.indexOf('?') > 0 ) {
-                    returnUrl += '&';
-                } else {
-                    returnUrl += '?';
-                }
-                returnUrl += "lti_errormsg=" + URLEncoder.encode(launch.getErrorMessage(), "UTF-8");
-                returnUrl += "&detail=" + URLEncoder.encode(launch.getBaseString(), "UTF-8");
-                res.sendRedirect(returnUrl);
-                return;
-            }
             PrintWriter out = res.getWriter();
             out.println("<pre>");
             out.println("Launch is not valid but nowhere to redirect");
