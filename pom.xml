@@ -16,6 +16,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>1.8</java.version>
     <skipTests>false</skipTests>
+    <jetty.http.port>8080</jetty.http.port>
   </properties>
 
   <dependencies>
@@ -58,7 +59,7 @@
        <artifactId>tsugi-util</artifactId>
        <version>0.1-SNAPSHOT</version>
     </dependency>
-	
+
 	<dependency>
 	    <groupId>com.fasterxml.jackson.core</groupId>
 	    <artifactId>jackson-core</artifactId>
@@ -121,11 +122,11 @@
           <target>${java.version}</target>
         </configuration>
       </plugin>
-      <plugin>            
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
         <configuration>
-          <webXml>src\main\webapp\WEB-INF\web.xml</webXml>        
+          <webXml>src\main\webapp\WEB-INF\web.xml</webXml>
         </configuration>
       </plugin>
       <plugin>
@@ -136,7 +137,7 @@
           <scanIntervalSeconds>10</scanIntervalSeconds>
           <connectors>
             <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
-              <port>8080</port>
+              <port>${jetty.http.port}</port>
               <maxIdleTime>60000</maxIdleTime>
             </connector>
           </connectors>
