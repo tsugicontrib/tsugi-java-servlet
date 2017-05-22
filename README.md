@@ -76,3 +76,14 @@ servlet you will be splashed with plenty of traceback in the iframe:
 
 Fix the tsugi.properties and try again.
 
+Other Source Code
+-----------------
+
+Tsugi Second-level API library
+
+https://github.com/tsugiproject/tsugi-java
+
+Tsugi low-level API library (formerly sakai-basicltiutil)
+
+https://github.com/tsugiproject/tsugi-util
+
