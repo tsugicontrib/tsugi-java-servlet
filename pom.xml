@@ -5,7 +5,7 @@
 
   <groupId>org.tsugi</groupId>
   <artifactId>tsugi-servlet</artifactId>
-  <version>0.1-SNAPSHOT</version>
+  <version>0.2-SNAPSHOT</version>
   <inceptionYear>2015</inceptionYear>
   <packaging>war</packaging>
 
@@ -51,13 +51,13 @@
     <dependency>
         <groupId>org.tsugi</groupId>
         <artifactId>tsugi-java</artifactId>
-        <version>0.1-SNAPSHOT</version>
+        <version>0.2-SNAPSHOT</version>
     </dependency>
 
     <dependency>
        <groupId>org.tsugi</groupId>
        <artifactId>tsugi-util</artifactId>
-       <version>0.1-SNAPSHOT</version>
+       <version>0.2-SNAPSHOT</version>
     </dependency>
 
 	<dependency>
